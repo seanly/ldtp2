@@ -247,7 +247,16 @@ class Ldtpd(Utils, ComboBox, Table, Menu, PageTabList,
         """
         self._delaycmdexec=delay
 
-    def launchapp(self, cmd, args=[], delay=0, env=1, lang="C"):
+    def _cleanupProcess(self, process, logfile_fds):
+        """ Helper function to wait until the process has finished and then clean it up
+        """
+        process.wait()
+        if logfile_fds:
+            for f in logfile_fds:
+                if f:
+                    f.close()
+
+    def launchapp(self, cmd, args=[], delay=0, env=1, lang="C", logfiles=None):
         """
         Launch application.
 
@@ -261,6 +270,8 @@ class Ldtpd(Utils, ComboBox, Table, Menu, PageTabList,
         @type env: int
         @param lang: Application language to be used
         @type lang: string
+        @param logfiles: Optional filename-tuple to capture standard output and standard error. Output will be appended.
+        @type logfiles: (string, string)
 
         @return: PID of new process
         @rtype: integer
@@ -276,13 +287,18 @@ class Ldtpd(Utils, ComboBox, Table, Menu, PageTabList,
         if lang:
             os.environ['LANG']=lang
         try:
-            process=subprocess.Popen([cmd]+args, close_fds=True)
+            files = None
+            if logfiles is None:
+                process=subprocess.Popen([cmd]+args, close_fds=True)
+            else:
+                files = [open(f, "a") if f else None for f in logfiles]
+                process=subprocess.Popen([cmd]+args, stdout=files[0], stderr=files[1])
             # Let us wait so that the application launches
             try:
                 time.sleep(int(delay))
             except ValueError:
                 time.sleep(5)
-            thread.start_new_thread(process.wait,())
+            thread.start_new_thread(self._cleanupProcess,(process, files))
         except Exception as e:
             raise LdtpServerException(str(e))
         os.environ['NO_GAIL']='1'

@@ -414,8 +414,8 @@ def waittillguinotexist(window_name, object_name = '',
                                        guiTimeOut)
 def guiexist(window_name, object_name = ''):
     return _remote_guiexist(window_name, object_name)
-def launchapp(cmd, args = [], delay = 0, env = 1, lang = "C"):
-    return _remote_launchapp(cmd, args, delay, env, lang)
+def launchapp(cmd, args = [], delay = 0, env = 1, lang = "C", logfiles = None ):
+    return _remote_launchapp(cmd, args, delay, env, lang, logfiles)
 def hasstate(window_name, object_name, state, guiTimeOut = 0):
     return _remote_hasstate(window_name, object_name, state, guiTimeOut)
 def selectrow(window_name, object_name, row_text):
