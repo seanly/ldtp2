@@ -320,6 +320,7 @@ class PollEvents(threading.Thread):
         # self._callback[name][0] - Event type
         # self._callback[name][1] - Callback function
         # self._callback[name][2] - Arguments to callback function
+        print(str(event.source) + " " + str(event.type))
         for name in self._callback:
             # Window created event
             # User registered window events

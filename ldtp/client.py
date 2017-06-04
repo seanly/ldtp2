@@ -72,6 +72,10 @@ class _Method(xmlrpclib._Method):
             logger.debug('%s(%s)' % (self.__name, \
                                          ', '.join(map(repr, args) + ['%s=%s' % (k, repr(v)) \
                                                                           for k, v in kwargs.items()])))
+        try:
+            return self.__send(self.__name, args)
+        except BaseException as be:
+            logger.debug('%s(%s) Trying once more' % (self.__name, str(be)))
         return self.__send(self.__name, args)
 
 class Transport(xmlrpclib.Transport):

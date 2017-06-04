@@ -101,6 +101,15 @@ class Ldtpd(Utils, ComboBox, Table, Menu, PageTabList,
             self._process_stats[key].stop()
 
     def _registered_event_cb(self, event):
+      l = [ "object:text-changed", "object:bounds-changed"]
+      show = True
+      for x in l:
+        if str(event.type).startswith(x):
+          show = False
+      if show:
+        print("event: " + str(event.source) + " " + str(event.type))
+        #import pdb
+        #pdb.set_trace()
       try:
         if event and event.source and event.type:
             abbrev_role, abbrev_name, label_by=self._ldtpize_accessible( \
@@ -132,6 +141,9 @@ class Ldtpd(Utils, ComboBox, Table, Menu, PageTabList,
 
     def _event_cb(self, event):
       try:
+        if event:
+          print(dir(event))
+          print(event)
         if event and event.type == "window:create" and event.source:
             for window in self._callback:
                 if window and self._match_name_to_acc(window, event.source):
@@ -472,7 +484,7 @@ class Ldtpd(Utils, ComboBox, Table, Menu, PageTabList,
 
         return 1
 
-    def registerevent(self, event_name):
+    def registerevent(self, event_name, cb=None):
         """
         Register at-spi event
 
@@ -482,11 +494,13 @@ class Ldtpd(Utils, ComboBox, Table, Menu, PageTabList,
         @return: 1 if registration was successful, 0 if not.
         @rtype: integer
         """
+        if cb is None:
+          cb = self._registered_event_cb
 
         pyatspi.Registry.deregisterEventListener( \
-            self._registered_event_cb, *self._registered_events)
+            cb, *self._registered_events)
         self._registered_events.append(event_name)
-        pyatspi.Registry.registerEventListener(self._registered_event_cb,
+        pyatspi.Registry.registerEventListener(cb,
                                                *self._registered_events)
         return 1
 
