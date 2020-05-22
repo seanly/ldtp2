@@ -32,7 +32,7 @@ from ldtp.log import logger
 from ldtp.client_exception import LdtpExecutionError, ERROR_CODE
 
 try:
-    import xmlrpc
+    import xmlrpclib
 except ImportError:
     import xmlrpc.client as xmlrpclib
 _python3 = False
@@ -66,7 +66,7 @@ if 'LDTP_WINDOWS' in os.environ or sys.platform.find('win') != -1:
 else:
    _ldtp_windows_env = False
 
-class _Method(xmlrpc.client._Method):
+class _Method(xmlrpclib._Method):
     def __call__(self, *args, **kwargs):
         if _ldtp_debug:
             logger.debug('%s(%s)' % (self.__name, \
@@ -78,7 +78,7 @@ class _Method(xmlrpc.client._Method):
             logger.debug('%s(%s) Trying once more' % (self.__name, str(be)))
         return self.__send(self.__name, args)
 
-class Transport(xmlrpc.client.Transport):
+class Transport(xmlrpclib.Transport):
     def _handle_signal(self, signum, frame):
         if _ldtp_debug:
             if signum == signal.SIGCHLD:
@@ -140,7 +140,7 @@ class Transport(xmlrpc.client.Transport):
                 if _python26:
                     # Noticed this in Hutlab environment (Windows 7 SP1)
                     # Activestate python 2.5, use the old method
-                    return xmlrpc.Transport.request(
+                    return xmlrpclib.Transport.request(
                         self, host, handler, request_body, verbose=verbose)
                 if not _python3:
   		    # Follwing implementation not supported in Python <= 2.6
@@ -158,7 +158,7 @@ class Transport(xmlrpc.client.Transport):
                 response = h.getresponse()
 
                 if response.status != 200:
-                    raise xmlrpc.client.ProtocolError(host + handler, response.status,
+                    raise xmlrpclib.ProtocolError(host + handler, response.status,
                                         response.reason, response.msg.headers)
 
                 payload = response.read()
@@ -199,7 +199,7 @@ class Transport(xmlrpc.client.Transport):
                         raise
                 # else raise exception
                 raise
-            except xmlrpc.client.Fault as e:
+            except xmlrpclib.Fault as e:
                 if hasattr(self, 'close'):
                     self.close()
                 if e.faultCode == ERROR_CODE:
@@ -223,9 +223,9 @@ class Transport(xmlrpc.client.Transport):
         except AttributeError:
             pass
 
-class LdtpClient(xmlrpc.client.ServerProxy):
+class LdtpClient(xmlrpclib.ServerProxy):
     def __init__(self, uri, encoding=None, verbose=0, use_datetime=0):
-        xmlrpc.client.ServerProxy.__init__(
+        xmlrpclib.ServerProxy.__init__(
             self, uri, Transport(), encoding, verbose, 1, use_datetime)
 
     def __getattr__(self, name):

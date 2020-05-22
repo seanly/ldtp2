@@ -21,7 +21,7 @@ Headers in this file shall remain intact.
 
 import re
 import time
-import sys
+
 try:
   from gi.repository import GObject as gobject
 except:
@@ -63,7 +63,7 @@ def _get_keyboard_keycodes():
                             shell = True, close_fds = True).communicate()
   if output[0] != '':
     output = output[0]
-    for line in output.decode(sys.getdefaultencoding()).split('\n'):
+    for line in output.decode().split('\n'):
       if line.strip() == '':
         continue
       split = re.split('=', line, maxsplit = 2)

@@ -68,7 +68,7 @@ class XMLRPCLdtpd(Ldtpd, tw_xmlrpc.XMLRPC, object):
             else:
                 value = 'error'
 
-            return xmlrpc.Fault(self.FAILURE, value)
+            return tw_xmlrpc.Fault(self.FAILURE, value)
 
     def render_POST(self, request):
         request.content.seek(0, 0)

@@ -474,7 +474,7 @@ class Utils:
         """
         # regex flags Multi-line, Unicode, Locale
         return bool(re_match(glob_trans(pattern), string,
-                             re.M | re.U | re.L))
+                             re.M | re.U ))
 
     def _match_name_to_acc(self, name, acc, classType = None):
         """
@@ -693,7 +693,7 @@ class Utils:
         key_binding = ''
         try:
             iaction = obj.queryAction()
-            for j in xrange(iaction.nActions):
+            for j in range(iaction.nActions):
                 if iaction.getKeyBinding(j) != '':
                     key_binding = iaction.getKeyBinding(j)
                     break
@@ -817,7 +817,7 @@ class Utils:
             raise LdtpServerException(
                 'Object does not have an Action interface')
         else:
-            for i in xrange(iaction.nActions):
+            for i in range(iaction.nActions):
                 if self._ldtp_debug:
                     print(iaction.getName(i))
                 if re.match(action, iaction.getName(i), re.I):

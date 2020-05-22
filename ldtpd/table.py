@@ -407,7 +407,7 @@ class Table(Utils):
                     except NotImplementedError:
                         iaction = None
                     if iaction:
-                        for i in xrange(iaction.nActions):
+                        for i in range(iaction.nActions):
                             # If the cell is toggle type
                             if re.match('toggle', iaction.getName(i), re.I):
                                 iaction.doAction(i)
@@ -434,7 +434,7 @@ class Table(Utils):
                 iaction = None
             self._grab_focus(cell)
             if iaction:
-                for i in xrange(iaction.nActions):
+                for i in range(iaction.nActions):
                     # If the cell is toggle type
                     if re.match('toggle', iaction.getName(i), re.I):
                         iaction.doAction(i)

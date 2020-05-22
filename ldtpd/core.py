@@ -1606,7 +1606,7 @@ class Ldtpd(ComboBox, Table, Menu, PageTabList,
         key_binding = ''
         try:
             iaction = obj.queryAction()
-            for j in xrange(iaction.nActions):
+            for j in range(iaction.nActions):
                 if iaction.getKeyBinding(j) != '':
                     key_binding = iaction.getKeyBinding(j)
                     break
