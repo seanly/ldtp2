@@ -20,8 +20,8 @@ Headers in this file shall remain intact.
 """
 
 import pyatspi 
-from utils import Utils
-from server_exception import LdtpServerException
+from .utils import Utils
+from .server_exception import LdtpServerException
 
 class LayeredPane(Utils):
     def _lp_selectitem(self, obj, item_name):
@@ -283,7 +283,7 @@ class LayeredPane(Utils):
         except:
             raise LdtpServerException('Unable to select all item')
 
-class ComboBox(Utils, LayeredPane):
+class ComboBox(LayeredPane):
     def selectitem(self, window_name, object_name, item_name):
         """
         Select combo box / layered pane item

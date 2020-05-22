@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
 LDTP v2 ldtp executable
 
@@ -47,6 +47,6 @@ def parse_cmd_line_option():
 
 options = parse_cmd_line_option()
 try:
-   ldtpd.main(options.port)
+    ldtpd.main(options.port)
 except KeyboardInterrupt:
-   pass
+    pass

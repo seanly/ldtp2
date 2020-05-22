@@ -26,6 +26,8 @@ import locale
 import subprocess
 try:
   # If we have gtk3+ gobject introspection, use that
+  import gi
+  gi.require_version('Wnck', '3.0')
   from gi.repository import Wnck as wnck
   from gi.repository import Gtk as gtk
   from gi.repository import Gdk as gdk
@@ -40,14 +42,14 @@ except:
     # Not all environments support wnck package
     pass
   gtk3=False
-from utils import Utils, ProcessStats
-from constants import abbreviated_roles
-from keypress_actions import KeyboardOp
-from waiters import ObjectExistsWaiter, GuiExistsWaiter, \
+from .utils import Utils, ProcessStats
+from .constants import abbreviated_roles
+from .keypress_actions import KeyboardOp
+from .waiters import ObjectExistsWaiter, GuiExistsWaiter, \
     GuiNotExistsWaiter, ObjectNotExistsWaiter, NullWaiter, \
     MaximizeWindow, MinimizeWindow, UnmaximizeWindow, UnminimizeWindow, \
     ActivateWindow, CloseWindow
-from server_exception import LdtpServerException
+from .server_exception import LdtpServerException
 import os
 import re
 import sys
@@ -56,19 +58,19 @@ import pyatspi
 import traceback
 from fnmatch import translate as glob_trans
 
-from menu import Menu
-from text import Text
-from mouse import Mouse
-from table import Table
-from value import Value
-from generic import Generic
-from combo_box import ComboBox
-from page_tab_list import PageTabList
+from .menu import Menu
+from .text import Text
+from .mouse import Mouse
+from .table import Table
+from .value import Value
+from .generic import Generic
+from .combo_box import ComboBox
+from .page_tab_list import PageTabList
 from gi.repository import GLib
 
-import thread
+import _thread
 
-class Ldtpd(Utils, ComboBox, Table, Menu, PageTabList,
+class Ldtpd(ComboBox, Table, Menu, PageTabList,
             Text, Mouse, Generic, Value):
     """
     Core LDTP class.
@@ -310,7 +312,7 @@ class Ldtpd(Utils, ComboBox, Table, Menu, PageTabList,
                 time.sleep(int(delay))
             except ValueError:
                 time.sleep(5)
-            thread.start_new_thread(self._cleanupProcess,(process, files))
+            _thread.start_new_thread(self._cleanupProcess,(process, files))
         except Exception as e:
             raise LdtpServerException(str(e))
         os.environ['NO_GAIL']='1'

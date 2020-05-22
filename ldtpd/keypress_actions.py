@@ -21,6 +21,7 @@ Headers in this file shall remain intact.
 
 import re
 import time
+import sys
 try:
   from gi.repository import GObject as gobject
 except:
@@ -28,7 +29,7 @@ except:
 import pyatspi
 import subprocess
 
-from sequence_step import AtomicAction
+from .sequence_step import AtomicAction
 _ = lambda x: x
 
 # Highest granularity, define timing for every single press and release
@@ -62,7 +63,7 @@ def _get_keyboard_keycodes():
                             shell = True, close_fds = True).communicate()
   if output[0] != '':
     output = output[0]
-    for line in output.split('\n'):
+    for line in output.decode(sys.getdefaultencoding()).split('\n'):
       if line.strip() == '':
         continue
       split = re.split('=', line, maxsplit = 2)

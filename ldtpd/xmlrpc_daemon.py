@@ -22,11 +22,10 @@ Headers in this file shall remain intact.
 import os
 import re
 import time
-import core
-from core import Ldtpd
-from twisted.web import xmlrpc
-import xmlrpclib
-from log import logger
+from .core import Ldtpd
+import xmlrpc as xmlrpc
+from .log import logger
+from twisted.web import xmlrpc as tw_xmlrpc
 
 if 'LDTP_COMMAND_DELAY' in os.environ:
     delay = os.environ['LDTP_COMMAND_DELAY']
@@ -36,7 +35,7 @@ else:
 _ldtp_debug = os.environ.get('LDTP_DEBUG', None)
 _ldtp_debug_file = os.environ.get('LDTP_DEBUG_FILE', None)
 
-class XMLRPCLdtpd(Ldtpd, xmlrpc.XMLRPC, object):
+class XMLRPCLdtpd(Ldtpd, tw_xmlrpc.XMLRPC, object):
     def __new__(cls, *args, **kwargs):
         for symbol in dir(Ldtpd):
             if symbol.startswith('_'): 
@@ -48,7 +47,7 @@ class XMLRPCLdtpd(Ldtpd, xmlrpc.XMLRPC, object):
         return object.__new__(cls, *args, **kwargs)
 
     def __init__(self):
-        xmlrpc.XMLRPC.__init__(self, allowNone = True)
+        tw_xmlrpc.XMLRPC.__init__(self, allowNone = True)
         Ldtpd.__init__(self)
 
     def _listFunctions(self):
@@ -61,7 +60,7 @@ class XMLRPCLdtpd(Ldtpd, xmlrpc.XMLRPC, object):
         # If LDTP_DEBUG env set, then print verbose info on console
         def _ebRender(self, failure):
             """Custom error render method (used by our XMLRPC objects)"""
-            if isinstance(failure.value, xmlrpclib.Fault):
+            if isinstance(failure.value, tw_xmlrpc.Fault):
                 return failure.value
 
             if hasattr(failure, 'getErrorMessage'):
@@ -69,13 +68,13 @@ class XMLRPCLdtpd(Ldtpd, xmlrpc.XMLRPC, object):
             else:
                 value = 'error'
 
-            return xmlrpclib.Fault(self.FAILURE, value)
+            return xmlrpc.Fault(self.FAILURE, value)
 
     def render_POST(self, request):
         request.content.seek(0, 0)
         request.setHeader("content-type", "text/xml")
         try:
-            args, functionPath = xmlrpclib.loads(request.content.read())
+            args, functionPath = xmlrpc.client.loads(request.content.read())
             if args and isinstance(args[-1], dict):
                 # Passing args and kwargs to _ldtp_callback
                 # fail, so using self, kind of work around !
@@ -98,7 +97,7 @@ class XMLRPCLdtpd(Ldtpd, xmlrpc.XMLRPC, object):
             else:
                 kwargs = {}
         except Exception as e:
-            f = xmlrpc.Fault(
+            f = tw_xmlrpc.Fault(
                 self.FAILURE, "Can't deserialize input: %s" % (e,))
             self._cbRender(f, request)
         else:
@@ -108,7 +107,7 @@ class XMLRPCLdtpd(Ldtpd, xmlrpc.XMLRPC, object):
                    function = self.lookupProcedure(functionPath)
                 else:
                    function = self._getFunction(functionPath)
-            except xmlrpc.Fault as f:
+            except tw_xmlrpc.Fault as f:
                 self._cbRender(f, request)
             else:
                 if _ldtp_debug:
@@ -122,9 +121,9 @@ class XMLRPCLdtpd(Ldtpd, xmlrpc.XMLRPC, object):
                 if _ldtp_debug_file:
                     with open(_ldtp_debug_file, "a") as fp:
                         fp.write(debug_st)
-                xmlrpc.defer.maybeDeferred(function, *args,
+                tw_xmlrpc.defer.maybeDeferred(function, *args,
                                            **kwargs).\
                                            addErrback(self._ebRender).\
                                            addCallback(self._cbRender,
                                                        request)
-        return xmlrpc.server.NOT_DONE_YET
+        return tw_xmlrpc.server.NOT_DONE_YET

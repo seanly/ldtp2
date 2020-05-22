@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
 LDTP v2 Core.
 
@@ -23,7 +23,7 @@ Headers in this file shall remain intact.
 from setuptools import setup
 
 setup(name="ldtp",
-      version="3.5.1",
+      version="3.4.1",
       description="Linux Desktop Testing Project Version 2",
       maintainer="Nagappan Alagappan",
       maintainer_email="nagappan@gmail.com",

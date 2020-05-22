@@ -20,11 +20,13 @@ Headers in this file shall remain intact.
 """
 
 wnckModule = False
-from utils import Utils
+from .utils import Utils
 import re
 import time
 try:
   # If we have gtk3+ gobject introspection, use that
+  import gi
+  gi.require_version('Wnck', '3.0')
   from gi.repository import Wnck as wnck
   from gi.repository import Gtk as gtk
   from gi.repository import GObject as gobject

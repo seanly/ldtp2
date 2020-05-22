@@ -33,8 +33,8 @@ import pyatspi
 import tempfile
 from base64 import b64encode
 
-from utils import Utils
-from server_exception import LdtpServerException
+from .utils import Utils
+from .server_exception import LdtpServerException
 
 class Generic(Utils):
     def imagecapture(self, window_name = None, x = 0, y = 0,

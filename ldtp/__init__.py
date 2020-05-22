@@ -40,7 +40,7 @@ if path == "":
 sys.path.append(path)
 
 import state
-import client
+from . import client
 from client_exception import LdtpExecutionError
 
 _t = None

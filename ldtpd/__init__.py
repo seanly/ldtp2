@@ -35,7 +35,7 @@ class SignalParent:
         os.kill(int(self.parentpid), signal.SIGUSR1)
 
 
-from xmlrpc_daemon import XMLRPCLdtpd
+from .xmlrpc_daemon import XMLRPCLdtpd
 def main(port=4118, parentpid=None, XMLRPCLdtpdFactory=lambda: XMLRPCLdtpd()):
     import os
     os.environ['NO_GAIL'] = '1'
