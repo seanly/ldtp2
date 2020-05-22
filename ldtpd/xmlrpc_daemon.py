@@ -113,7 +113,7 @@ class XMLRPCLdtpd(Ldtpd, tw_xmlrpc.XMLRPC, object):
                 if _ldtp_debug:
                     debug_st = '%s(%s)' % \
                         (functionPath,
-                         ', '.join(map(repr, args) + \
+                         ', '.join(list(map(repr, args)) + \
                                        ['%s=%s' % (k, repr(v)) \
                                             for k, v in kwargs.items()]))
                     print(debug_st)
