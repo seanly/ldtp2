@@ -159,41 +159,17 @@ class Mouse(Utils):
                      dest_x < size[0] or dest_y < size[1]):
             return 0
 
-        x_flag = False # Iterated x ?
-        y_flag = False # Iterated y ?
+        # int() to assure being a natural number
+        steps = int(max(abs(source_x-dest_x), abs(source_y-dest_y)))
+        step = 0
         while True:
-            if not x_flag:
-                if source_x > dest_x:
-                    # If source X greather than dest X
-                    # then move -1 pixel
-                    source_x -= 1
-                elif source_x < dest_x:
-                    # If source X less than dest X
-                    # then move +1 pixel
-                    source_x += 1
-                else:
-                    # If source X equal to dest X
-                    # then don't process X co-ordinate
-                    x_flag = True
-            if not y_flag:
-                if source_y > dest_y:
-                    # If source Y greather than dest Y
-                    # then move -1 pixel
-                    source_y -= 1
-                elif source_y < dest_y:
-                    # If source Y less than dest Y
-                    # then move +1 pixel
-                    source_y += 1
-                else:
-                    # If source Y equal to dest Y
-                    # then don't process Y co-ordinate
-                    y_flag = True
+            current_x = int(source_x + ((dest_x-source_x) * step) / steps)
+            current_y = int(source_y + ((dest_y-source_y) * step) / steps)
+            step = step + 1
             if delay:
                 time.sleep(delay)
             # Start mouse move from source_x, source_y to dest_x, dest_y
-            self.generatemouseevent(source_x, source_y, 'abs')
-            if source_x == dest_x and source_y == dest_y:
-                # If we have reached the dest_x and dest_y
-                # then break the loop
+            self.generatemouseevent(current_x, current_y, 'abs')
+            if step == steps:
                 break
         return 1
