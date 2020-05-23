@@ -379,6 +379,8 @@ class Utils:
             except LookupError:
                 # If the window doesn't exist, remove from the cached list
                 self.cached_apps.remove(app)
+            except GeneratorExit:
+                raise
             except:
                 # In at-spi2 gi._glib.GError exception is thrown
                 # If the window doesn't exist, remove from the cached list

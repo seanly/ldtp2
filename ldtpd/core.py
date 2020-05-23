@@ -197,7 +197,7 @@ class Ldtpd(ComboBox, Table, Menu, PageTabList,
                 # A11Y lookup error
                 continue
             except GLib.Error as ge:
-                if "The application no longer exists" in ge:
+                if "The application no longer exists" in repr(ge):
                     continue
                 raise
         return app_list
