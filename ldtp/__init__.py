@@ -398,7 +398,7 @@ def imagecapture(window_name = None, out_file = None, x = 0, y = 0,
     try:
         f.write(b64decode(data)) # Python 2
     except TypeError:
-        f.write(b64decode(bytes(data,'utf-8'))) # Python 3
+        f.write(b64decode(data.data)) # Python 3
     f.close()
 
     return out_file

@@ -193,7 +193,7 @@ class Generic(Utils):
               pb.save(tmpFile, 'png')
               del pb
               gc.collect()
-        rv = b64encode(open(tmpFile).read())
+        rv = b64encode(open(tmpFile,'rb').read())
         os.remove(tmpFile)
         return rv
 
