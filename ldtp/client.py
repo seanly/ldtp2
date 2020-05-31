@@ -28,8 +28,8 @@ import platform
 import traceback
 import subprocess
 from socket import error as SocketError
-from ldtp.log import logger
-from ldtp.client_exception import LdtpExecutionError, ERROR_CODE
+from .log import logger
+from .client_exception import LdtpExecutionError, ERROR_CODE
 
 try:
     import xmlrpclib
