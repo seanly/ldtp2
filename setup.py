@@ -29,7 +29,7 @@ setup(name="ldtp",
       maintainer_email="nagappan@gmail.com",
       url="http://ldtp.freesktop.org",
       license="GNU Lesser General Public License (LGPL)",
-      install_requires=["twisted"],
+      install_requires=["twisted==15.0.0"],
       packages=["ldtp", "ldtpd", "ooldtp", "ldtputils", "ldtpme"],
       long_description="Linux Desktop Testing Project is aimed at producing " \
           "high quality cross platform GUI test automation framework and cutting-edge tools that " \
